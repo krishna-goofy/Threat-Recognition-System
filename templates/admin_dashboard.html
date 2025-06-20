@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard - Threat Recognition System</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f4f7fc;
+    }
+    /* Fixed Navbar */
+    .navbar {
+      background: #343a40;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+    .nav-link {
+      color: #fff !important;
+      font-size: 1.1rem;
+      margin-right: 1rem;
+    }
+    .nav-link:hover {
+      color: #ffc107 !important;
+    }
+    /* Page Header */
+    .page-header {
+      margin-top: 80px;
+      margin-bottom: 40px;
+    }
+    .page-header h2 {
+      font-weight: 700;
+    }
+    /* Card & Table Styling */
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .card-title {
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .table thead {
+      background: #e9ecef;
+    }
+    .table-hover tbody tr:hover {
+      background-color: #f1f3f5;
+    }
+    /* Badge Styling */
+    .badge.bg-danger {
+      font-size: 0.9rem;
+      padding: 0.5em 0.75em;
+    }
+    .badge.bg-success {
+      font-size: 0.9rem;
+      padding: 0.5em 0.75em;
+    }
+    /* Button Styling */
+    .btn-custom {
+      border-radius: 50px;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .btn-custom:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function stopRecording(incident_id, camera_id, btn) {
+      $.ajax({
+        url: "{{ url_for('stop_recording') }}",
+        type: "POST",
+        data: { incident_id: incident_id, camera_id: camera_id },
+        success: function(response) {
+          $(btn).prop("disabled", true);
+          $(btn).removeClass("btn-warning").addClass("btn-success");
+          $(btn).text("Recording Stopped");
+        },
+        error: function(err) {
+          alert("Error: " + err.responseJSON.error);
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+  <!-- Fixed Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">ThreatRec Admin</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="adminNavbar">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('add_camera') }}">Add New Camera</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container page-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>Admin Dashboard</h2>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Cameras Card -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Cameras</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Camera URL</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Working</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for camera in cameras %}
+                <tr>
+                  <td>{{ camera.id }}</td>
+                  <td>{{ camera.url }}</td>
+                  <td>{{ camera.latitude }}</td>
+                  <td>{{ camera.longitude }}</td>
+                  <td>
+                    {% if camera.working %}
+                      <span class="badge bg-success">Yes</span>
+                    {% else %}
+                      <span class="badge bg-danger">No</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="5" class="text-center">No cameras registered.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Recordings Card -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Active Recordings</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Incident ID</th>
+                <th>Camera ID</th>
+                <th>Camera URL</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rec in active_recordings %}
+                <tr>
+                  <td>{{ rec.incident_id }}</td>
+                  <td>{{ rec.camera_id }}</td>
+                  <td>{{ rec.camera_url }}</td>
+                  <td>
+                    <button class="btn btn-warning btn-sm btn-custom" onclick="stopRecording({{ rec.incident_id }}, {{ rec.camera_id }}, this)">
+                      <i class="fas fa-stop-circle"></i> Stop Recording
+                    </button>
+                  </td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="4" class="text-center">No active recordings.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Incidents Card -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Incidents</h3>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User Latitude</th>
+                <th>User Longitude</th>
+                <th>Camera ID</th>
+                <th>Timestamp</th>
+                <th>Violence Detected</th>
+                <th>Weapon Detected</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for incident in incidents %}
+                <tr>
+                  <td>{{ incident.id }}</td>
+                  <td>{{ incident.user_latitude }}</td>
+                  <td>{{ incident.user_longitude }}</td>
+                  <td>{{ incident.camera_id }}</td>
+                  <td>{{ incident.timestamp }}</td>
+                  <td>
+                    {% if incident.violence_detected %}
+                      <span class="badge bg-danger">Yes</span>
+                    {% else %}
+                      <span class="badge bg-success">No</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if incident.weapon_detected %}
+                      <span class="badge bg-danger">Yes</span>
+                    {% else %}
+                      <span class="badge bg-success">No</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="7" class="text-center">No incidents recorded.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

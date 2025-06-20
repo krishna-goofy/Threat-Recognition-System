@@ -1,0 +1,43 @@
+/* Base Styles */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Headings */
+h1, h2, h3, .card-title {
+  color: #343a40;
+}
+
+/* Jumbotron customization */
+.jumbotron {
+  padding: 2rem 2rem;
+  border-radius: 0.5rem;
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  border-radius: 0.5rem;
+}
+
+/* Button Styles */
+.btn {
+  border-radius: 0.5rem;
+}
+
+/* Table Styles */
+.table thead th {
+  background-color: #e9ecef;
+  color: #343a40;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 0.5rem;
+}
+
+/* Additional spacing */
+.mt-5 {
+  margin-top: 3rem !important;
+}

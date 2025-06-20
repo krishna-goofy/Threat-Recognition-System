@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Threat Recognition System</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Montserrat', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+    /* Navigation */
+    .navbar {
+      background: rgba(0, 0, 0, 0.85);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem;
+    }
+    .nav-link {
+      color: #fff !important;
+      font-size: 1.1rem;
+      margin-right: 1rem;
+    }
+    /* Hero Section */
+    .hero {
+      background: url('{{ url_for("static", filename="images/hero-bg.jpg") }}') no-repeat center center;
+      background-size: cover;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #007bff; /* Blue color matching your theme */
+    }
+    .hero-content p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+    }
+    .btn-custom {
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .btn-custom:hover {
+      transform: translateY(-3px);
+    }
+    /* Features Section */
+    #features {
+      padding: 80px 0;
+    }
+    #features .feature-item {
+      text-align: center;
+      padding: 2rem;
+      transition: transform 0.3s;
+    }
+    #features .feature-item:hover {
+      transform: translateY(-10px);
+    }
+    #features .feature-item i {
+      font-size: 3rem;
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
+    #features .feature-item h4 {
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    /* About Section */
+    #about {
+      padding: 80px 0;
+      background: #fff;
+    }
+    #about img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    /* Contact Section */
+    #contact {
+      padding: 80px 0;
+      background: #f1f1f1;
+      text-align: center;
+    }
+    /* Footer */
+    footer {
+      background: #343a40;
+      color: #ccc;
+      padding: 20px 0;
+      text-align: center;
+    }
+    footer a {
+      color: #ccc;
+      text-decoration: none;
+    }
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">ThreatRec</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero d-flex">
+    <div class="container hero-content">
+      <h1>Welcome to Threat Recognition System</h1>
+      <p>Empowering safety with real-time surveillance and intelligent threat detection.</p>
+      <a href="{{ url_for('login') }}" class="btn btn-primary btn-custom me-3">Login</a>
+      <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-custom">Register</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold">Our Features</h2>
+        <p class="text-muted">Explore the advanced features that make our platform unique.</p>
+      </div>
+      <div class="row">
+        <div class="col-md-4 feature-item">
+          <i class="fas fa-video"></i>
+          <h4>Live Surveillance</h4>
+          <p>Monitor real-time video feeds from multiple cameras with advanced recording technology.</p>
+        </div>
+        <div class="col-md-4 feature-item">
+          <i class="fas fa-exclamation-triangle"></i>
+          <h4>Threat Detection</h4>
+          <p>Utilize AI-powered models for violence and weapon detection, ensuring rapid response.</p>
+        </div>
+        <div class="col-md-4 feature-item">
+          <i class="fas fa-bell"></i>
+          <h4>Instant Alerts</h4>
+          <p>Receive immediate notifications during emergencies to keep you informed at all times.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <img src="{{ url_for('static', filename='images/about.jpg') }}" alt="About Threat Recognition System">
+        </div>
+        <div class="col-lg-6">
+          <h2 class="fw-bold">About Threat Recognition System</h2>
+          <p class="lead">Threat Recognition System is a cutting-edge platform designed to enhance public safety. By leveraging real-time video analytics and advanced AI models, we offer state-of-the-art solutions for detecting threats and ensuring rapid response.</p>
+          <p>Our system integrates live video monitoring with intelligent analysis to identify violent behavior and weapons, empowering security personnel and law enforcement agencies to act decisively when it matters most.</p>
+          <a href="#contact" class="btn btn-primary btn-custom">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="fw-bold">Contact Us</h2>
+      <p class="mb-4">Have questions or need more information? We're here to help!</p>
+      <a href="mailto:contact@threatrec.com" class="btn btn-primary btn-custom">Email Us</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="mb-0">&copy; 2025 Threat Recognition System. All rights reserved.</p>
+      <p class="small">Designed with <i class="fas fa-heart text-danger"></i> by Your Company Name</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
